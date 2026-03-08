@@ -6,13 +6,6 @@ import lombok.*;
 
 import java.time.LocalDate;
 
-/**
- * Maps to the 'residence_staff' table.
- * Represents staff members assigned to residence halls.
- *
- * Relationships:
- *  - ManyToOne → ResidenceHall
- */
 @Entity
 @Table(name = "residence_staff")
 @Getter
@@ -40,14 +33,17 @@ public class ResidenceStaff {
     @Column(name = "email", unique = true, length = 255)
     private String email;
 
+    @Column(name = "password")
+    private String password;
+
     @Column(name = "phone", length = 20)
     private String phone;
 
     @Column(name = "role", length = 100)
-    private String role;           // e.g. Hall Manager, Cleaner, Security
+    private String role;
 
     @Column(name = "date_of_birth")
-    private LocalDate dateOfBirth; // used for report (n): staff over 60
+    private LocalDate dateOfBirth;
 
     @Column(name = "is_active")
     private Boolean isActive = true;

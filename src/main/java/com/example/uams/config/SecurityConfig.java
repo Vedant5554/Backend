@@ -25,57 +25,43 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
-/**
- * Central Spring Security configuration.
- *
- * Key decisions:
- *  - Stateless session (JWT, no HttpSession)
- *  - CSRF disabled (safe for stateless REST APIs)
- *  - Public routes: /api/auth/**, /swagger-ui/**, /api-docs/**
- *  - Everything else requires a valid JWT
- *  - BCrypt password encoding
- *  - CORS open for localhost:3000 (React dev server) — tighten in production
- */
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity          // enables @PreAuthorize on controller methods
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter  jwtAuthenticationFilter;
     private final CustomUserDetailsService customUserDetailsService;
 
-    // ── Public routes (no JWT needed) ─────────────────────────────────────────
+    // ── Public routes — no JWT needed ─────────────────────────────────────────
     private static final String[] PUBLIC_URLS = {
             "/api/auth/**",
             "/swagger-ui/**",
             "/swagger-ui.html",
             "/api-docs/**",
-            "/v3/api-docs/**"
+            "/v3/api-docs/**",
+
+            // ── Seeding routes — allow initial data creation without JWT ──────
+            // TODO: Remove these after initial setup is done
+            "/api/advisers",
+            "/api/staff",
+            "/api/halls",
+            "/api/students"
     };
 
-    // ── Filter chain ──────────────────────────────────────────────────────────
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Disable CSRF — not needed for stateless JWT APIs
                 .csrf(AbstractHttpConfigurer::disable)
-
-                // CORS config
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-
-                // No server-side session — every request must carry a JWT
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-                // Route permissions
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_URLS).permitAll()
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // preflight
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated()
                 )
-
-                // Plug in our JWT filter before Spring's username/password filter
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class);
@@ -83,36 +69,31 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // ── Authentication provider ───────────────────────────────────────────────
     @Bean
     public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(customUserDetailsService);
+        DaoAuthenticationProvider provider =
+                new DaoAuthenticationProvider(customUserDetailsService);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
 
-    // ── AuthenticationManager — injected into AuthController for login ────────
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
-    // ── Password encoder ──────────────────────────────────────────────────────
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // ── CORS ──────────────────────────────────────────────────────────────────
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-
         config.setAllowedOrigins(List.of(
-                "http://localhost:3000",   // React dev server
-                "http://localhost:5173"    // Vite dev server
+                "http://localhost:3000",
+                "http://localhost:5173"
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));

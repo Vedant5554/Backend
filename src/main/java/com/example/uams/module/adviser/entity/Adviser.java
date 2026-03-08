@@ -3,12 +3,6 @@ package com.example.uams.module.adviser.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-/**
- * Maps to the 'advisers' table.
- *
- * Relationships:
- *  - OneToMany → Student (an adviser can have many students)
- */
 @Entity
 @Table(name = "advisers")
 @Getter
@@ -31,6 +25,9 @@ public class Adviser {
 
     @Column(name = "email", nullable = false, unique = true, length = 255)
     private String email;
+
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "phone", length = 20)
     private String phone;

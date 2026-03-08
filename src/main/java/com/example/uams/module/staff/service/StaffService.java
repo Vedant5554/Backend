@@ -9,6 +9,7 @@ import com.example.uams.module.staff.dto.StaffResponse;
 import com.example.uams.module.staff.entity.ResidenceStaff;
 import com.example.uams.module.staff.repository.StaffRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ public class StaffService {
 
     private final StaffRepository         staffRepository;
     private final ResidenceHallRepository hallRepository;
+    private final PasswordEncoder         passwordEncoder;
 
     // ── Create ────────────────────────────────────────────────────────────────
 
@@ -27,22 +29,22 @@ public class StaffService {
     public StaffResponse create(StaffRequest request) {
         if (request.getEmail() != null
                 && staffRepository.existsByEmail(request.getEmail())) {
-            throw new BadRequestException(
-                    "Email already in use: " + request.getEmail());
+            throw new BadRequestException("Email already in use: " + request.getEmail());
         }
 
         ResidenceStaff staff = ResidenceStaff.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .phone(request.getPhone())
                 .role(request.getRole())
+                .dateOfBirth(request.getDateOfBirth())
                 .isActive(true)
                 .build();
 
         if (request.getHallId() != null) {
-            ResidenceHall hall = findHallOrThrow(request.getHallId());
-            staff.setHall(hall);
+            staff.setHall(findHallOrThrow(request.getHallId()));
         }
 
         return StaffResponse.from(staffRepository.save(staff));
@@ -97,8 +99,7 @@ public class StaffService {
         if (request.getEmail() != null
                 && !request.getEmail().equals(staff.getEmail())
                 && staffRepository.existsByEmail(request.getEmail())) {
-            throw new BadRequestException(
-                    "Email already in use: " + request.getEmail());
+            throw new BadRequestException("Email already in use: " + request.getEmail());
         }
 
         staff.setFirstName(request.getFirstName());
@@ -106,11 +107,17 @@ public class StaffService {
         staff.setEmail(request.getEmail());
         staff.setPhone(request.getPhone());
         staff.setRole(request.getRole());
+        staff.setDateOfBirth(request.getDateOfBirth());
+
+        // Only re-hash password if a new one is provided
+        if (request.getPassword() != null && !request.getPassword().isBlank()) {
+            staff.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
 
         if (request.getHallId() != null) {
             staff.setHall(findHallOrThrow(request.getHallId()));
         } else {
-            staff.setHall(null);  // unassign from hall
+            staff.setHall(null);
         }
 
         return StaffResponse.from(staffRepository.save(staff));

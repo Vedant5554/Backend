@@ -7,6 +7,7 @@ import com.example.uams.module.adviser.dto.AdviserResponse;
 import com.example.uams.module.adviser.entity.Adviser;
 import com.example.uams.module.adviser.repository.AdviserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,20 +18,21 @@ import java.util.List;
 public class AdviserService {
 
     private final AdviserRepository adviserRepository;
+    private final PasswordEncoder   passwordEncoder;
 
     // ── Create ────────────────────────────────────────────────────────────────
 
     @Transactional
     public AdviserResponse create(AdviserRequest request) {
         if (adviserRepository.existsByEmail(request.getEmail())) {
-            throw new BadRequestException(
-                    "Email already in use: " + request.getEmail());
+            throw new BadRequestException("Email already in use: " + request.getEmail());
         }
 
         Adviser adviser = Adviser.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .phone(request.getPhone())
                 .department(request.getDepartment())
                 .build();
@@ -42,10 +44,8 @@ public class AdviserService {
 
     @Transactional(readOnly = true)
     public List<AdviserResponse> getAll() {
-        return adviserRepository.findAll()
-                .stream()
-                .map(AdviserResponse::from)
-                .toList();
+        return adviserRepository.findAll().stream()
+                .map(AdviserResponse::from).toList();
     }
 
     // ── Read one ──────────────────────────────────────────────────────────────
@@ -55,7 +55,7 @@ public class AdviserService {
         return AdviserResponse.from(findOrThrow(id));
     }
 
-    // ── Get adviser for a specific student (used in reports) ──────────────────
+    // ── Get adviser for a specific student ────────────────────────────────────
 
     @Transactional(readOnly = true)
     public AdviserResponse getByStudentId(Long studentId) {
@@ -73,8 +73,7 @@ public class AdviserService {
 
         if (!adviser.getEmail().equals(request.getEmail())
                 && adviserRepository.existsByEmail(request.getEmail())) {
-            throw new BadRequestException(
-                    "Email already in use: " + request.getEmail());
+            throw new BadRequestException("Email already in use: " + request.getEmail());
         }
 
         adviser.setFirstName(request.getFirstName());
@@ -82,6 +81,11 @@ public class AdviserService {
         adviser.setEmail(request.getEmail());
         adviser.setPhone(request.getPhone());
         adviser.setDepartment(request.getDepartment());
+
+        // Only re-hash password if a new one is provided
+        if (request.getPassword() != null && !request.getPassword().isBlank()) {
+            adviser.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
 
         return AdviserResponse.from(adviserRepository.save(adviser));
     }
@@ -97,17 +101,14 @@ public class AdviserService {
 
     @Transactional(readOnly = true)
     public List<AdviserResponse> search(String query) {
-        return adviserRepository.search(query)
-                .stream()
-                .map(AdviserResponse::from)
-                .toList();
+        return adviserRepository.search(query).stream()
+                .map(AdviserResponse::from).toList();
     }
 
     // ── Internal helper ───────────────────────────────────────────────────────
 
     private Adviser findOrThrow(Long id) {
         return adviserRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Adviser", id));
+                .orElseThrow(() -> new ResourceNotFoundException("Adviser", id));
     }
 }

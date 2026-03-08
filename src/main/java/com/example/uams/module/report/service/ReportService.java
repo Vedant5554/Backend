@@ -2,7 +2,6 @@ package com.example.uams.module.report.service;
 
 import com.example.uams.module.adviser.repository.AdviserRepository;
 import com.example.uams.module.apartment.repository.InspectionRepository;
-import com.example.uams.module.course.repository.StudentCourseRepository;
 import com.example.uams.module.hall.repository.HallPlacementRepository;
 import com.example.uams.module.hall.repository.RoomRepository;
 import com.example.uams.module.invoice.repository.InvoiceRepository;
@@ -30,7 +29,6 @@ public class ReportService {
 
     private final StudentRepository       studentRepository;
     private final AdviserRepository       adviserRepository;
-    private final StudentCourseRepository studentCourseRepository;
     private final HallPlacementRepository placementRepository;
     private final RoomRepository          roomRepository;
     private final InspectionRepository    inspectionRepository;
