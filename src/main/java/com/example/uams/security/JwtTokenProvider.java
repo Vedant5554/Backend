@@ -13,9 +13,11 @@ import java.util.Date;
 
 /**
  * Handles all JWT operations:
- *  - generateToken()   → creates a signed JWT from an authenticated user
- *  - getUserIdFromJwt()→ extracts the subject (user id) from a token
- *  - validateToken()   → checks signature + expiry, returns true/false
+ *  - generateToken()    → creates a signed JWT from an authenticated user
+ *  - getUserIdFromJwt() → extracts the subject (user id) from a token
+ *  - getEmailFromJwt()  → extracts the email claim
+ *  - getRoleFromJwt()   → extracts the role claim
+ *  - validateToken()    → checks signature + expiry, returns true/false
  */
 @Slf4j
 @Component
@@ -45,17 +47,18 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    // ── Extract user id from token ────────────────────────────────────────────
+    // ── Extract claims ────────────────────────────────────────────────────────
 
     public Long getUserIdFromJwt(String token) {
-        String subject = Jwts.parser()
-                .verifyWith(getSigningKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getSubject();
+        return Long.parseLong(getClaims(token).getSubject());
+    }
 
-        return Long.parseLong(subject);
+    public String getEmailFromJwt(String token) {
+        return getClaims(token).get("email", String.class);
+    }
+
+    public String getRoleFromJwt(String token) {
+        return getClaims(token).get("role", String.class);
     }
 
     // ── Validate ──────────────────────────────────────────────────────────────
@@ -81,6 +84,14 @@ public class JwtTokenProvider {
     }
 
     // ── Internal ──────────────────────────────────────────────────────────────
+
+    private Claims getClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
 
     private SecretKey getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
