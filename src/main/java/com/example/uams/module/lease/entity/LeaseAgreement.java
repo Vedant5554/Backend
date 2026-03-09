@@ -40,6 +40,15 @@ public class LeaseAgreement {
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
+    @Column(name = "enter_date")
+    private LocalDate enterDate;
+
+    @Column(name = "leave_date")
+    private LocalDate leaveDate;
+
+    @Column(name = "place_number", length = 50)
+    private String placeNumber;
+
     @Column(name = "monthly_rent", precision = 10, scale = 2)
     private BigDecimal monthlyRent;
 

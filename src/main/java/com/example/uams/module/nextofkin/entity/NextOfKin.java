@@ -39,4 +39,13 @@ public class NextOfKin {
 
     @Column(name = "email", length = 255)
     private String email;
+
+    @Column(name = "street", length = 200)
+    private String street;
+
+    @Column(name = "city", length = 100)
+    private String city;
+
+    @Column(name = "postcode", length = 20)
+    private String postcode;
 }

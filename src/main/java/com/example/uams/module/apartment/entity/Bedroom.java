@@ -40,6 +40,9 @@ public class Bedroom {
     @Column(name = "bedroom_number", nullable = false, length = 20)
     private String bedroomNumber;
 
+    @Column(name = "place_number", unique = true, length = 50)
+    private String placeNumber;
+
     @Column(name = "monthly_fee", precision = 10, scale = 2)
     private BigDecimal monthlyFee;
 

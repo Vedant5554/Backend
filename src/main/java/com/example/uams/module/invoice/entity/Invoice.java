@@ -46,6 +46,18 @@ public class Invoice {
     @Column(name = "due_date")
     private LocalDate dueDate;
 
+    @Column(name = "semester", length = 20)
+    private String semester;
+
+    @Column(name = "payment_method", length = 50)
+    private String paymentMethod;
+
+    @Column(name = "first_reminder_date")
+    private LocalDate firstReminderDate;
+
+    @Column(name = "second_reminder_date")
+    private LocalDate secondReminderDate;
+
     @Column(name = "paid_date")
     private LocalDate paidDate;
 

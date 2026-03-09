@@ -29,6 +29,9 @@ public class ResidenceHall {
     @Column(name = "address", length = 500)
     private String address;
 
+    @Column(name = "telephone_number", length = 20)
+    private String telephoneNumber;
+
     @Column(name = "total_rooms")
     private Integer totalRooms;
 

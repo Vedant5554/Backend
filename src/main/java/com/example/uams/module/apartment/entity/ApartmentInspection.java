@@ -39,6 +39,9 @@ public class ApartmentInspection {
     @Column(name = "remarks", columnDefinition = "TEXT")
     private String remarks;
 
+    @Column(name = "is_satisfactory")
+    private Boolean isSatisfactory;
+
     // e.g. PASSED, FAILED, PENDING
     @Column(name = "status", length = 50)
     private String status;

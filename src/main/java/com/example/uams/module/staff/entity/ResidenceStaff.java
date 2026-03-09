@@ -45,6 +45,22 @@ public class ResidenceStaff {
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
+    @Column(name = "street", length = 200)
+    private String street;
+    
+    @Column(name = "city", length = 100)
+    private String city;
+    
+    @Column(name = "postcode", length = 20)
+    private String postcode;
+
+    @Column(name = "gender", length = 20)
+    private String gender;
+
+    @Column(name = "location", length = 100)
+    private String location;
+
+    @Builder.Default
     @Column(name = "is_active")
     private Boolean isActive = true;
 }
