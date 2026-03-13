@@ -38,4 +38,13 @@ public class LeaseRequest {
     private LeaseStatus status = LeaseStatus.ACTIVE;
 
     private String notes;
+
+    // ── Added fields (spec requirements) ─────────────────────────────────────
+
+    private LocalDate enterDate;    // date student wishes to enter
+
+    private LocalDate leaveDate;    // date student wishes to leave (if known)
+
+    @Size(max = 50)
+    private String placeNumber;     // unique room identifier used in lease
 }

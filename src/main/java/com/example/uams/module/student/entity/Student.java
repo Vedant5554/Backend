@@ -55,16 +55,18 @@ public class Student {
     @Column(name = "waiting_list")
     private Boolean waitingList = false;
 
-    // --- New Fields Additions from Spec ---
-    
+    // ── Address ───────────────────────────────────────────────────────────────
+
     @Column(name = "street", length = 200)
     private String street;
-    
+
     @Column(name = "city", length = 100)
     private String city;
-    
+
     @Column(name = "postcode", length = 20)
     private String postcode;
+
+    // ── Contact & Personal ────────────────────────────────────────────────────
 
     @Column(name = "mobile_phone", length = 20)
     private String mobilePhone;
@@ -81,9 +83,7 @@ public class Student {
     @Column(name = "additional_comments", columnDefinition = "TEXT")
     private String additionalComments;
 
-    // placed / waiting
-    @Column(name = "current_status", length = 20)
-    private String currentStatus;
+    // ── Academic ──────────────────────────────────────────────────────────────
 
     @Column(name = "major", length = 100)
     private String major;
@@ -91,7 +91,7 @@ public class Student {
     @Column(name = "minor", length = 100)
     private String minor;
 
-    // --------------------------------------
+    // ── Status ────────────────────────────────────────────────────────────────
 
     @Builder.Default
     @Column(name = "is_active")

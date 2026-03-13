@@ -28,4 +28,15 @@ public class NextOfKinRequest {
 
     @Email(message = "Email must be valid")
     private String email;
+
+    // ── Address ───────────────────────────────────────────────────────────────
+
+    @Size(max = 200)
+    private String street;
+
+    @Size(max = 100)
+    private String city;
+
+    @Size(max = 20)
+    private String postcode;
 }

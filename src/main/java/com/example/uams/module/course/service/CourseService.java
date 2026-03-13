@@ -39,6 +39,11 @@ public class CourseService {
                 .courseName(request.getCourseName())
                 .courseCode(request.getCourseCode())
                 .department(request.getDepartment())
+                // ── new fields ──
+                .instructorName(request.getInstructorName())
+                .instructorPhone(request.getInstructorPhone())
+                .instructorEmail(request.getInstructorEmail())
+                .instructorRoomNumber(request.getInstructorRoomNumber())
                 .build();
 
         return CourseResponse.from(courseRepository.save(course));
@@ -71,6 +76,11 @@ public class CourseService {
         course.setCourseName(request.getCourseName());
         course.setCourseCode(request.getCourseCode());
         course.setDepartment(request.getDepartment());
+        // ── new fields ──
+        course.setInstructorName(request.getInstructorName());
+        course.setInstructorPhone(request.getInstructorPhone());
+        course.setInstructorEmail(request.getInstructorEmail());
+        course.setInstructorRoomNumber(request.getInstructorRoomNumber());
 
         return CourseResponse.from(courseRepository.save(course));
     }

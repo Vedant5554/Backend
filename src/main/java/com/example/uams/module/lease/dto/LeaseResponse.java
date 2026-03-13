@@ -24,6 +24,9 @@ public class LeaseResponse {
     private Semester    semester;
     private LeaseStatus status;
     private String      notes;
+    private LocalDate   enterDate;
+    private LocalDate   leaveDate;
+    private String      placeNumber;
 
     public static LeaseResponse from(LeaseAgreement l) {
         LeaseResponse r = new LeaseResponse();
@@ -39,6 +42,9 @@ public class LeaseResponse {
         r.semester      = l.getSemester();
         r.status        = l.getStatus();
         r.notes         = l.getNotes();
+        r.enterDate     = l.getEnterDate();
+        r.leaveDate     = l.getLeaveDate();
+        r.placeNumber   = l.getPlaceNumber();
         return r;
     }
 }

@@ -32,6 +32,10 @@ public class NextOfKinService {
                 .relationship(request.getRelationship())
                 .phone(request.getPhone())
                 .email(request.getEmail())
+                // ── new fields ──
+                .street(request.getStreet())
+                .city(request.getCity())
+                .postcode(request.getPostcode())
                 .build();
 
         return NextOfKinResponse.from(nextOfKinRepository.save(nok));
@@ -66,6 +70,10 @@ public class NextOfKinService {
         nok.setRelationship(request.getRelationship());
         nok.setPhone(request.getPhone());
         nok.setEmail(request.getEmail());
+        // ── new fields ──
+        nok.setStreet(request.getStreet());
+        nok.setCity(request.getCity());
+        nok.setPostcode(request.getPostcode());
 
         return NextOfKinResponse.from(nextOfKinRepository.save(nok));
     }

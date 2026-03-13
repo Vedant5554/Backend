@@ -41,4 +41,37 @@ public class StudentRequest {
 
     // Optional — link to an existing adviser
     private Long adviserId;
+
+    // ── Added fields (spec requirements) ─────────────────────────────────────
+
+    @Size(max = 50, message = "Banner number must not exceed 50 characters")
+    private String bannerNumber;       // e.g. B00123456
+
+    @Size(max = 200)
+    private String street;
+
+    @Size(max = 100)
+    private String city;
+
+    @Size(max = 20)
+    private String postcode;
+
+    @Size(max = 20)
+    private String mobilePhone;
+
+    @Size(max = 20)
+    private String gender;
+
+    @Size(max = 100)
+    private String nationality;
+
+    private String specialNeeds;
+
+    private String additionalComments;
+
+    @Size(max = 100)
+    private String major;
+
+    @Size(max = 100)
+    private String minor;
 }

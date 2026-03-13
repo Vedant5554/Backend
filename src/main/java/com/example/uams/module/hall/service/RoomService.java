@@ -41,6 +41,7 @@ public class RoomService {
                 .monthlyFee(request.getMonthlyFee())
                 .isAvailable(request.getIsAvailable() != null
                         && request.getIsAvailable())
+                .placeNumber(request.getPlaceNumber())
                 .build();
 
         return RoomResponse.from(roomRepository.save(room));
@@ -89,6 +90,7 @@ public class RoomService {
         room.setRoomType(request.getRoomType());
         room.setMonthlyFee(request.getMonthlyFee());
         room.setIsAvailable(request.getIsAvailable());
+        room.setPlaceNumber(request.getPlaceNumber());
 
         return RoomResponse.from(roomRepository.save(room));
     }

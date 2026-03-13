@@ -21,20 +21,28 @@ public class InvoiceResponse {
     private LocalDate  dueDate;
     private LocalDate  paidDate;
     private String     status;
+    private String     semester;
+    private String     paymentMethod;
+    private LocalDate  firstReminderDate;
+    private LocalDate  secondReminderDate;
 
     public static InvoiceResponse from(Invoice i) {
         InvoiceResponse r = new InvoiceResponse();
-        r.invoiceId     = i.getInvoiceId();
-        r.invoiceNumber = i.getInvoiceNumber();
-        r.studentId     = i.getStudent().getStudentId();
-        r.studentName   = i.getStudent().getFirstName()
+        r.invoiceId           = i.getInvoiceId();
+        r.invoiceNumber       = i.getInvoiceNumber();
+        r.studentId           = i.getStudent().getStudentId();
+        r.studentName         = i.getStudent().getFirstName()
                 + " " + i.getStudent().getLastName();
-        r.description   = i.getDescription();
-        r.amount        = i.getAmount();
-        r.issueDate     = i.getIssueDate();
-        r.dueDate       = i.getDueDate();
-        r.paidDate      = i.getPaidDate();
-        r.status        = i.getStatus();
+        r.description         = i.getDescription();
+        r.amount              = i.getAmount();
+        r.issueDate           = i.getIssueDate();
+        r.dueDate             = i.getDueDate();
+        r.paidDate            = i.getPaidDate();
+        r.status              = i.getStatus();
+        r.semester            = i.getSemester();
+        r.paymentMethod       = i.getPaymentMethod();
+        r.firstReminderDate   = i.getFirstReminderDate();
+        r.secondReminderDate  = i.getSecondReminderDate();
         return r;
     }
 }

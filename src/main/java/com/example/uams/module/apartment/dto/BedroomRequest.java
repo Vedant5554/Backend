@@ -26,4 +26,7 @@ public class BedroomRequest {
     private Long      studentId;
     private LocalDate startDate;
     private LocalDate endDate;
+
+    @Size(max = 50, message = "Place number must not exceed 50 characters")
+    private String placeNumber;   // unique bedroom identifier used in leases
 }

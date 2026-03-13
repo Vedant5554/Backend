@@ -14,7 +14,7 @@ public class HallStudentReport {
     private Long      bannerId;
     private String    fullName;
     private String    roomNumber;
-    private Long      placeNumber;
+    private String    placeNumber;
     private String    hallName;
     private LocalDate startDate;
 }

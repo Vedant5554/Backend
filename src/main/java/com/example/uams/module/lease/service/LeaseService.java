@@ -52,6 +52,10 @@ public class LeaseService {
                 .status(request.getStatus() != null
                         ? request.getStatus() : LeaseStatus.ACTIVE)
                 .notes(request.getNotes())
+                // ── new fields ──
+                .enterDate(request.getEnterDate())
+                .leaveDate(request.getLeaveDate())
+                .placeNumber(request.getPlaceNumber())
                 .build();
 
         return LeaseResponse.from(leaseRepository.save(lease));
@@ -134,6 +138,10 @@ public class LeaseService {
         lease.setSemester(request.getSemester());
         lease.setStatus(request.getStatus());
         lease.setNotes(request.getNotes());
+        // ── new fields ──
+        lease.setEnterDate(request.getEnterDate());
+        lease.setLeaveDate(request.getLeaveDate());
+        lease.setPlaceNumber(request.getPlaceNumber());
 
         return LeaseResponse.from(leaseRepository.save(lease));
     }

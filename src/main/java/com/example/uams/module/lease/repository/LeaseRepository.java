@@ -46,7 +46,6 @@ public interface LeaseRepository extends JpaRepository<LeaseAgreement, Long> {
             @Param("year") int year);
 
     // Report: all active leases with student details
-    @Query("SELECT l FROM LeaseAgreement l JOIN FETCH l.student " +
-            "WHERE l.status = com.example.uams.module.lease.entity.LeaseStatus.ACTIVE")
-    List<LeaseAgreement> findAllActiveWithStudent();
+    @Query("SELECT l FROM LeaseAgreement l JOIN FETCH l.student WHERE l.status = :status")
+    List<LeaseAgreement> findAllActiveWithStudent(@Param("status") LeaseStatus status);
 }

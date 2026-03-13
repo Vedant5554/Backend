@@ -3,8 +3,10 @@ package com.example.uams.module.report.service;
 import com.example.uams.module.adviser.repository.AdviserRepository;
 import com.example.uams.module.apartment.repository.InspectionRepository;
 import com.example.uams.module.hall.repository.HallPlacementRepository;
+import com.example.uams.module.hall.repository.ResidenceHallRepository;
 import com.example.uams.module.hall.repository.RoomRepository;
 import com.example.uams.module.invoice.repository.InvoiceRepository;
+import com.example.uams.module.lease.entity.LeaseStatus;
 import com.example.uams.module.lease.entity.Semester;
 import com.example.uams.module.lease.repository.LeaseRepository;
 import com.example.uams.module.report.dto.*;
@@ -19,6 +21,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -30,6 +33,7 @@ public class ReportService {
     private final StudentRepository       studentRepository;
     private final AdviserRepository       adviserRepository;
     private final HallPlacementRepository placementRepository;
+    private final ResidenceHallRepository hallRepository;
     private final RoomRepository          roomRepository;
     private final InspectionRepository    inspectionRepository;
     private final LeaseRepository         leaseRepository;
@@ -40,11 +44,11 @@ public class ReportService {
 
     @Transactional(readOnly = true)
     public List<HallManagerReport> hallManagersReport() {
-        return staffRepository.findByRole("Hall Manager").stream()
-                .map(s -> new HallManagerReport(
-                        s.getHall() != null ? s.getHall().getHallName() : "Unassigned",
-                        s.getFirstName() + " " + s.getLastName(),
-                        s.getPhone()))
+        return hallRepository.findAll().stream()
+                .map(h -> new HallManagerReport(
+                        h.getHallName(),
+                        h.getManagerName(),
+                        h.getManagerPhone()))
                 .toList();
     }
 
@@ -52,7 +56,7 @@ public class ReportService {
 
     @Transactional(readOnly = true)
     public List<StudentLeaseReport> studentsWithLeases() {
-        return leaseRepository.findAllActiveWithStudent().stream()
+        return leaseRepository.findAllActiveWithStudent(LeaseStatus.ACTIVE).stream()
                 .map(l -> new StudentLeaseReport(
                         l.getStudent().getStudentId(),
                         l.getStudent().getFirstName() + " " + l.getStudent().getLastName(),
@@ -142,7 +146,7 @@ public class ReportService {
                         p.getStudent().getStudentId(),
                         p.getStudent().getFirstName() + " " + p.getStudent().getLastName(),
                         p.getRoom().getRoomNumber(),
-                        p.getRoom().getRoomId(),
+                        p.getRoom().getPlaceNumber(),
                         p.getRoom().getHall().getHallName(),
                         p.getStartDate()))
                 .toList();
@@ -165,10 +169,12 @@ public class ReportService {
 
     @Transactional(readOnly = true)
     public StudentCategoryReport studentCountByCategory() {
-        return new StudentCategoryReport(
-                studentRepository.findByCategory(StudentCategory.UNDERGRADUATE).size(),
-                studentRepository.findByCategory(StudentCategory.POSTGRADUATE).size(),
-                studentRepository.findByCategory(StudentCategory.INTERNATIONAL).size());
+        Map<StudentCategory, Long> counts = Arrays.stream(StudentCategory.values())
+                .collect(Collectors.toMap(
+                        cat -> cat,
+                        cat -> (long) studentRepository.findByCategory(cat).size()
+                ));
+        return new StudentCategoryReport(counts);
     }
 
     // ── (j) Students who have not supplied next-of-kin details ───────────────

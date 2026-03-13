@@ -18,6 +18,9 @@ public class NextOfKinResponse {
     private String relationship;
     private String phone;
     private String email;
+    private String street;
+    private String city;
+    private String postcode;
 
     // ── Static factory ────────────────────────────────────────────────────────
 
@@ -31,6 +34,9 @@ public class NextOfKinResponse {
         r.relationship = nok.getRelationship();
         r.phone        = nok.getPhone();
         r.email        = nok.getEmail();
+        r.street       = nok.getStreet();
+        r.city         = nok.getCity();
+        r.postcode     = nok.getPostcode();
         return r;
     }
 }

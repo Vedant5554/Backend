@@ -24,4 +24,7 @@ public class RoomRequest {
     private BigDecimal monthlyFee;
 
     private Boolean isAvailable = true;
+
+    @Size(max = 50, message = "Place number must not exceed 50 characters")
+    private String placeNumber;   // unique room identifier used in leases
 }

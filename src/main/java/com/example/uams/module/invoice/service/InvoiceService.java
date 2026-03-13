@@ -45,6 +45,11 @@ public class InvoiceService {
                 .paidDate(request.getPaidDate())
                 .status(request.getStatus() != null
                         ? request.getStatus() : "PENDING")
+                // ── new fields ──
+                .semester(request.getSemester())
+                .paymentMethod(request.getPaymentMethod())
+                .firstReminderDate(request.getFirstReminderDate())
+                .secondReminderDate(request.getSecondReminderDate())
                 .build();
 
         return InvoiceResponse.from(invoiceRepository.save(invoice));
@@ -113,6 +118,11 @@ public class InvoiceService {
         invoice.setDueDate(request.getDueDate());
         invoice.setPaidDate(request.getPaidDate());
         invoice.setStatus(request.getStatus());
+        // ── new fields ──
+        invoice.setSemester(request.getSemester());
+        invoice.setPaymentMethod(request.getPaymentMethod());
+        invoice.setFirstReminderDate(request.getFirstReminderDate());
+        invoice.setSecondReminderDate(request.getSecondReminderDate());
 
         return InvoiceResponse.from(invoiceRepository.save(invoice));
     }

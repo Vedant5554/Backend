@@ -38,4 +38,16 @@ public class InvoiceRequest {
     // PENDING, PAID, OVERDUE, CANCELLED
     @Size(max = 20)
     private String status = "PENDING";
+
+    // ── Added fields (spec requirements) ─────────────────────────────────────
+
+    @Size(max = 20)
+    private String semester;            // e.g. YEAR1_SEM1, SUMMER
+
+    @Size(max = 50)
+    private String paymentMethod;       // CASH, VISA, CHECK
+
+    private LocalDate firstReminderDate;
+
+    private LocalDate secondReminderDate;
 }

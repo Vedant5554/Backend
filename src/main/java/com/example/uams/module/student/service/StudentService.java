@@ -42,6 +42,18 @@ public class StudentService {
                 .waitingList(request.getWaitingList() != null
                         && request.getWaitingList())
                 .isActive(true)
+                // ── new fields ──
+                .bannerNumber(request.getBannerNumber())
+                .street(request.getStreet())
+                .city(request.getCity())
+                .postcode(request.getPostcode())
+                .mobilePhone(request.getMobilePhone())
+                .gender(request.getGender())
+                .nationality(request.getNationality())
+                .specialNeeds(request.getSpecialNeeds())
+                .additionalComments(request.getAdditionalComments())
+                .major(request.getMajor())
+                .minor(request.getMinor())
                 .build();
 
         if (request.getAdviserId() != null) {
@@ -91,6 +103,19 @@ public class StudentService {
         student.setCategory(request.getCategory());
         student.setWaitingList(request.getWaitingList() != null
                 && request.getWaitingList());
+
+        // ── new fields ───────────────────────────────────────────────────────
+        student.setBannerNumber(request.getBannerNumber());
+        student.setStreet(request.getStreet());
+        student.setCity(request.getCity());
+        student.setPostcode(request.getPostcode());
+        student.setMobilePhone(request.getMobilePhone());
+        student.setGender(request.getGender());
+        student.setNationality(request.getNationality());
+        student.setSpecialNeeds(request.getSpecialNeeds());
+        student.setAdditionalComments(request.getAdditionalComments());
+        student.setMajor(request.getMajor());
+        student.setMinor(request.getMinor());
 
         // Only re-hash if a new password was provided
         if (request.getPassword() != null && !request.getPassword().isBlank()) {

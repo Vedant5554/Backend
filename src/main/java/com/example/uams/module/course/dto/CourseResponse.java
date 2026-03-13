@@ -18,6 +18,10 @@ public class CourseResponse {
     private String    courseName;
     private String    courseCode;
     private String    department;
+    private String    instructorName;
+    private String    instructorPhone;
+    private String    instructorEmail;
+    private String    instructorRoomNumber;
 
     // Populated only when returned as part of a student enrolment
     private Long      enrolmentId;
@@ -27,10 +31,14 @@ public class CourseResponse {
 
     public static CourseResponse from(Course course) {
         CourseResponse r = new CourseResponse();
-        r.courseId   = course.getCourseId();
-        r.courseName = course.getCourseName();
-        r.courseCode = course.getCourseCode();
-        r.department = course.getDepartment();
+        r.courseId             = course.getCourseId();
+        r.courseName           = course.getCourseName();
+        r.courseCode           = course.getCourseCode();
+        r.department           = course.getDepartment();
+        r.instructorName       = course.getInstructorName();
+        r.instructorPhone      = course.getInstructorPhone();
+        r.instructorEmail      = course.getInstructorEmail();
+        r.instructorRoomNumber = course.getInstructorRoomNumber();
         return r;
     }
 
