@@ -64,6 +64,7 @@ public class StudentService {
         }
 
         return StudentResponse.from(studentRepository.save(student));
+
     }
 
     // ── Read all ──────────────────────────────────────────────────────────────
@@ -130,6 +131,7 @@ public class StudentService {
         }
 
         return StudentResponse.from(studentRepository.save(student));
+
     }
 
     // ── Soft delete (deactivate) ──────────────────────────────────────────────
@@ -159,6 +161,8 @@ public class StudentService {
                 .stream()
                 .map(StudentResponse::from)
                 .toList();
+
+
     }
 
     // ── Internal helper ───────────────────────────────────────────────────────

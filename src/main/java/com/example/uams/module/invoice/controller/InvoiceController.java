@@ -1,14 +1,24 @@
 package com.example.uams.module.invoice.controller;
 
 import com.example.uams.common.ApiResponse;
+import com.example.uams.exception.ResourceNotFoundException;
 import com.example.uams.module.invoice.dto.InvoiceRequest;
 import com.example.uams.module.invoice.dto.InvoiceResponse;
+import com.example.uams.module.invoice.entity.Invoice;
+import com.example.uams.module.invoice.repository.InvoiceRepository;
+import com.example.uams.module.invoice.service.InvoicePdfService;
 import com.example.uams.module.invoice.service.InvoiceService;
+import com.example.uams.module.student.repository.StudentRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+
 
 import java.util.List;
 
@@ -31,6 +41,9 @@ import java.util.List;
 public class InvoiceController {
 
     private final InvoiceService invoiceService;
+    private final InvoiceRepository invoiceRepository;
+    private final InvoicePdfService invoicePdfService;
+    private final StudentRepository studentRepository;
 
     // ── GET all ───────────────────────────────────────────────────────────────
     @GetMapping
@@ -99,5 +112,36 @@ public class InvoiceController {
         invoiceService.delete(id);
         return ResponseEntity.ok(
                 ApiResponse.ok("Invoice deleted successfully", null));
+    }
+
+    @GetMapping("/{id}/download")
+    public ResponseEntity<byte[]> downloadInvoice(@PathVariable Long id) {
+
+        Invoice invoice = invoiceRepository.findByIdWithStudent(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Invoice", id));
+
+        Long currentUserId = getCurrentUserId();
+
+        if (invoice.getStudent() == null ||
+                !invoice.getStudent().getStudentId().equals(currentUserId)) {
+            throw new RuntimeException("Access denied");
+        }
+
+        byte[] pdf = invoicePdfService.generateInvoicePdf(invoice);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=invoice_" + id + ".pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdf);
+    }
+
+    private Long getCurrentUserId() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+
+        return studentRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"))
+                .getStudentId();
     }
 }

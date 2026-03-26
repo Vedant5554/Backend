@@ -42,4 +42,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     List<Invoice> findByIssueDateBetween(
             @Param("from") LocalDate from,
             @Param("to") LocalDate to);
+
+    @Query("SELECT i FROM Invoice i LEFT JOIN FETCH i.student WHERE i.invoiceId = :id")
+    Optional<Invoice> findByIdWithStudent(@Param("id") Long id);
 }

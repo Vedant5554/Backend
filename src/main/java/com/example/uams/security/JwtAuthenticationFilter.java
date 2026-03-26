@@ -31,7 +31,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtTokenProvider       jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
     private final CustomUserDetailsService userDetailsService;
 
     @Override
@@ -43,9 +43,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String jwt = getJwtFromRequest(request);
 
-            if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
+            if (!StringUtils.hasText(jwt) || !jwtTokenProvider.validateToken(jwt)) {
+                filterChain.doFilter(request, response);
+                return;
+            }
 
-                Long userId = jwtTokenProvider.getUserIdFromJwt(jwt);
+            Long userId = jwtTokenProvider.getUserIdFromJwt(jwt);
+
+            if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
                 UserDetails userDetails = userDetailsService.loadUserById(userId);
 
@@ -58,7 +63,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authentication.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(request));
 
-                // Tell Spring Security this request is authenticated
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
 

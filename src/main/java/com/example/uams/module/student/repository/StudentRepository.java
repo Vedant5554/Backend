@@ -38,6 +38,9 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     @Query("SELECT DISTINCT s FROM Student s JOIN LeaseAgreement l ON l.student = s")
     List<Student> findStudentsWithLeases();
 
+    @Query("SELECT s FROM Student s LEFT JOIN FETCH s.adviser WHERE s.email = :email")
+    Optional<Student> findByEmailWithAdviser(String email);
+
     // Search by name (used in admin search)
     @Query("SELECT s FROM Student s WHERE " +
             "LOWER(s.firstName) LIKE LOWER(CONCAT('%', :name, '%')) OR " +

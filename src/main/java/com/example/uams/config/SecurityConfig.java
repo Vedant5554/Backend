@@ -22,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 
 import java.util.List;
 
@@ -37,17 +38,10 @@ public class SecurityConfig {
     // ── Public routes — no JWT needed ─────────────────────────────────────────
     private static final String[] PUBLIC_URLS = {
             "/api/auth/**",
-            "/swagger-ui/**",
-            "/swagger-ui.html",
-            "/api-docs/**",
-            "/v3/api-docs/**",
+
 
             // ── Seeding routes — allow initial data creation without JWT ──────
-            // TODO: Remove these after initial setup is done
-            "/api/advisers",
-            "/api/staff",
-            "/api/halls",
-            "/api/students"
+
     };
 
     @Bean
@@ -71,8 +65,7 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider =
-                new DaoAuthenticationProvider(customUserDetailsService);
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(customUserDetailsService);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
