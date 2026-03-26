@@ -52,6 +52,9 @@ dependencies {
     // Testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+
+    implementation 'org.flywaydb:flyway-core:10.15.0'    // only once
+    implementation 'org.flywaydb:flyway-mysql:10.15.0'
 }
 
 tasks.named('test') {

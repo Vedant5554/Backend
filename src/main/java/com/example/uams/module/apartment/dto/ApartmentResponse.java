@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 public class ApartmentResponse {
 
     private Long    apartmentId;
+    private String  flatNumber;
     private String  apartmentName;
     private String  address;
     private Integer totalBedrooms;
@@ -18,6 +19,7 @@ public class ApartmentResponse {
     public static ApartmentResponse from(StudentApartment a) {
         ApartmentResponse r = new ApartmentResponse();
         r.apartmentId   = a.getApartmentId();
+        r.flatNumber    = a.getFlatNumber();
         r.apartmentName = a.getApartmentName();
         r.address       = a.getAddress();
         r.totalBedrooms = a.getTotalBedrooms();

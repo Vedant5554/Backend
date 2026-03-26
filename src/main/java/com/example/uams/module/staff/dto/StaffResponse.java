@@ -16,6 +16,7 @@ public class StaffResponse {
     private String    email;
     private String    phone;
     private String    role;
+    private String    location;
     private LocalDate dateOfBirth;
     private Boolean   isActive;
 
@@ -31,6 +32,7 @@ public class StaffResponse {
         r.email        = s.getEmail();
         r.phone        = s.getPhone();
         r.role         = s.getRole();
+        r.location     = s.getLocation();
         r.dateOfBirth  = s.getDateOfBirth();
         r.isActive     = s.getIsActive();
 

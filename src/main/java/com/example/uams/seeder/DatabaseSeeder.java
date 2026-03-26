@@ -291,9 +291,9 @@ public class DatabaseSeeder implements CommandLineRunner {
             nok.setStudent(student);
             nok.setFullName(pick(FIRST_NAMES) + " " + pick(LAST_NAMES));
             nok.setRelationship(pick(RELATIONSHIPS));
-            nok.setStreet(pick(STREETS));
-            nok.setCity(pick(CITIES));
-            nok.setPostcode(pick(POSTCODES));
+            nok.setStreet(student.getStreet());
+            nok.setCity(student.getCity());
+            nok.setPostcode(student.getPostcode());
             nok.setPhone(phone());
             nok.setEmail("nok." + student.getStudentId() + "@email.com");
             nextOfKinRepository.save(nok);
