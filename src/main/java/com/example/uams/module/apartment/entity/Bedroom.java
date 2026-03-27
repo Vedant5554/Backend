@@ -53,5 +53,6 @@ public class Bedroom {
     private LocalDate endDate;
 
     @Column(name = "is_occupied")
+    @Builder.Default
     private Boolean isOccupied = false;
 }
