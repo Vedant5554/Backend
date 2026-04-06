@@ -1281,14 +1281,18 @@ Apartments with unsatisfactory inspection results.
 ---
 
 ### GET `/api/reports/unpaid-invoices`
-All currently unpaid invoices.
+Students who have not paid their invoices by a given date.
+
+**Query Parameters:**
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| byDate | string (ISO Date) | Yes | Date to check against. e.g. `2026-05-01` |
 
 **Response:** `ApiResponseListUnpaidInvoiceReport`
 ```json
 {
   "data": [
     {
-      "invoiceId": 1,
       "studentId": 1,
       "studentName": "string",
       "invoiceNumber": "string",

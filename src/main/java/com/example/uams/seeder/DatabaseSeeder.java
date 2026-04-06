@@ -514,7 +514,6 @@ public class DatabaseSeeder implements CommandLineRunner {
 
     private void seedInvoices(List<LeaseAgreement> leases) {
         log.info("Seeding 800 invoices...");
-        Semester[] sems   = Semester.values();
         String[]   statuses = {"PAID","PAID","PAID","PAID","PAID","PAID","PENDING","PENDING","PENDING","OVERDUE"};
         int idx = 1;
         for (LeaseAgreement lease : leases) {
