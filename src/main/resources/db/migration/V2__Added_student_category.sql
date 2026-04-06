@@ -1,6 +1,3 @@
-ALTER TABLE apartment_inspections
-DROP
-COLUMN is_satisfactory;
 
 ALTER TABLE students
 DROP
