@@ -20,6 +20,12 @@ The core entities revolve around the **Student**. A student can be linked to mul
 - **Academics**: Students enroll in **Courses** (`student_courses`) and have an assigned **Adviser**.
 - **Management**: **Residence Staff** manage the halls, while **Inspections** track apartment conditions.
 
+### Entity Relationship Diagram
+
+The following ER diagram visualizes the complete database schema, showing all tables, their columns, data types, and the foreign key relationships connecting them:
+
+![UAMS ER Diagram](assets/er_diagram.png)
+
 ---
 
 ## 3. Detailed Table Documentation
